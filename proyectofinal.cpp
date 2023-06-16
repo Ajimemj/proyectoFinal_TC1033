@@ -165,7 +165,5 @@ public:
     void encender_apagar (bool estado) {
         estado_encendido = estado;
     }
-    void set
-   // void acelerar (void);
-   // void frenar (void);
+    
 };

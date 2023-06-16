@@ -4,7 +4,6 @@ using namespace std;
 int main() {
     // Crear un objeto automóvil 
     Automovil automovil();
-    automovil.
 
     // Establecer el nivel de gasolina en 20 litros
     car.setGasLevel(20.0f);
