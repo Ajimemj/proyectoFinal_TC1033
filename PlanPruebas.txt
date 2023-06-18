@@ -1,0 +1,29 @@
+1Plan de Pruebas
+
+Probar escenario normal
+Probar valores límite
+    Tanque:
+        Revisar que auto inicia con tanque lleno
+        Cargar Gasolina cuando el tanque ya está lleno
+        Cargar Gasolona 10 litros cuando el tanque tiene 40 litros
+        Cargar -10 litros (error)
+        Cargar 0 litros (no es error, pero no hace nada)
+        Que no se encienda indicador de nivel bajo cuando esté en 15%
+        Que se encienda indicador de nivel bajo cuando esté en 14%
+    Acelerar:   
+        Acelerar hasta que tanque está vacio
+        Acelelar más de 230 km /hr (no se puede)
+        Que se encienda indicador de Alta velocidad cuando velocidad llega a 161 km/hr
+        Que se mantenga encendido mientras velocidad sigue aumentando más de 161 km/hr
+        Que no se encienda indicador de Alta velocidad cuando velocidad llega a 160 km/hr
+    Luces:
+        Revisar que auto inicia con luces apagadas
+        Apagar luces cuando estan apagadas
+        Prender luces cuando están prendidas
+
+    Frenar:
+        Frenar cuando velocidad es menor que 15 km/hr
+        Frenar cuando velocidad es cero
+
+
+    
