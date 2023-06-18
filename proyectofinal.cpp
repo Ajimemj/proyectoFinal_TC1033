@@ -8,135 +8,102 @@ Situación Problema Programacion orientada a Objetos
 Implementación de las clases
 */
 
-// #include "Automovil.h"
+#include "Automovil.h"
 #include <iostream>
-#include <cmath>
 using namespace std;
 
-class Llanta {
-private:
-    float presion;
- //   const float Presion_baja = 30.0f;
- //   const float Presion_inicial = 33.0f;
+// MÉTODOS DE LA CLASE AUTOMÓVIL
+// Constructor. 
+// EL automóvil inicia Apagado, Con velocidad 0, Con tanque lleno y con Luces Apagadas
+Automovil::Automovil() : encendido(false), velocidad(0), nivelGasolina(42), lucesEncendidas(false) {}
 
-public:
-    // Constructor
-    Llanta () {
-        presion = 33.0f;
-    };
+void Automovil::encenderApagar() {
+    encendido = !encendido;
+}
 
-    //Getter
-    float getPresion () {
-        return presion;
+void Automovil::acelerar() {
+    // Solo puede acelerar si el auto está encendido y tiene gasolina
+    // Al acelerar, la velocidad se incrementa en 15 km /hr (hasta un máximo de 230 km /hr) 
+    //     y el nivel de gasolina se disminuye en 0.005 * velocidad (hasta un minimo de 0)
+    if (encendido && nivelGasolina > 0) {
+        velocidad = velocidad + 15;
+        if (velocidad > 230) velocidad = 230;
+        nivelGasolina = nivelGasolina - (0.005 * velocidad);
+        if (nivelGasolina < 0 ) nivelGasolina = 0;
     }
+}
 
-    // Setter
-    void setPresion (float presionLlanta) {
-        presion = presionLlanta;
-    }
+void Automovil::frenar() {
+    velocidad = velocidad - 25;
+    if (velocidad < 0)
+        velocidad = 0;
+}
 
-    //Auxiliares
-    bool PresionBaja () {
-        if (presion < 30.0f) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-};
+void Automovil::prenderLuces() {
+    lucesEncendidas = true;
+}
 
-//-------------------------------------//
-class Tanque {
-private:
-    //const float capacidad = 42.0f;
-    float nivel;
-    
-public:
-    // Constructor - El automovil inicia con tanque lleno
-    Tanque () {
-        nivel = 42.0f;
-    }
-     // Define Metodos ACCESORES 
-     //     Getter
-     float getNivel () {
-        return nivel;
-     }
-     //     Setter
-    void setNivel (float nuevoNivel) {
-        nivel = nuevoNivel;
-    }
+void Automovil::apagarLuces() {
+    lucesEncendidas = false;
+}
 
-    // Define Métodos AUXILIARES 
-    //void cargar_gas (float litros);
-    //void calc_nivel_indicador (float litros);
-    //void calc_nivel_bajo (float litros);
-};
+void Automovil::cargarGasolina(float litros) {
+    // Verifica que los litros a cargar sean positivos y que no exceda la capacidad del tanque
+    if (litros > 0 && litros <= (42 - nivelGasolina))
+        nivelGasolina = nivelGasolina + litros;
+}
 
-//-------------------------------------//
-class Luces {
-private:
-    bool luces_on_off;
-public:
-    // Constructor - El automovil inicia con luces apagadas
-    Luces () {
-        luces_on_off = false;
-    }
-    void Encender () {
-        luces_on_off = true;
-    }
-    void Apagar () {
-        luces_on_off = false;
-    }
-    bool get_luces_on_off (void) {
-        return luces_on_off;
-    }
-};
+void Automovil::mostrarTablero() const {
+    Tablero tablero;
+    // Muestra los 4 indicadores de Estado del Automóvil
+    tablero.mostrarEstado(encendido, velocidad, nivelGasolina, lucesEncendidas);
+    // Muestra los 2 indicadores de Peligro - Alta Velocidad y Nivel de Gasolina Bajo
+    tablero.mostrarIndicadores(velocidad > 160, (nivelGasolina / 42) * 100 < 15);
+}
 
-//-------------------------------------//
-class Tablero {
-//private:
-  
-    
-public:
-    void muestraEstadoAuto (bool encendido) {
-        cout <<  "Estado del auto:  ";
-        if (encendido) {
-            cout << "Encendido" << endl;
-        }
-        else {
-            cout << "Apagado" << endl;
-        }
-    }
-    void muestraVelocidad (float velocidad, float vel_max) {
-        cout << "Velocidad:     " << velocidad << " km/h" << endl;
-        if (velocidad > vel_max) {
-            cout << "Peligro! Alta velocidad" << endl;
-        }
-    }
-    void muestraNivelGas (float nivel, float capacidad) {
-        float porcentaje;
-        porcentaje = nivel / capacidad;
-        cout << "Nivel de gasolina:  " << porcentaje << " %";
-        if (nivel < (capacidad * .15)) {
-            cout << "Nivel de Gasolina Bajo" << endl;
-        }
-    }
-    void muestraLuces (bool luces_onoff) {
-        cout << "Luces:       ";
-        if (luces_onoff == true)
-            cout << "Encendidas" << endl;
-        else
-            cout << "Apagadas" << endl;
 
-    }
-    /*
-    void muestraLlantaBaja (int indiceLlanta) {
-        if (llantas[indiceLlanta]->PresionBaja()) {
-            cout << "Llanta ", indiceLlanta + 1 << " con presion baja!" << endl;
-        }
-    }
-    */
+// MÉTODOS DE LA CLASE TABLERO 
+Tablero::Tablero() : indicadorAltaVelocidad(false), indicadorNivelBajoCombustible(false) {}
+
+// El tablero tiene Estado (4 variables) e Indicadores (2 Advertencias)
+// Muestra Estado del Automóvil
+void Tablero::mostrarEstado(bool encendido, int velocidad, float nivelGasolina, bool lucesEncendidas) const {
+    cout << "Estado del Automóvil: " << (encendido ? "Encendido" : "Apagado") << endl;
+    cout << "Velocidad: " << velocidad << " km/hr" << endl;
+    cout << "Nivel de Combustible: " << (nivelGasolina / 42) * 100 << "%" << endl;
+    cout << "Luces: " << (lucesEncendidas ? "Encendidas" : "Apagadas") << endl;
+}
+// Muestra Indicadores del Automóvil
+void Tablero::mostrarIndicadores(bool indicadorAltaVelocidad, bool indicadorNivelBajoCombustible) const {
+    cout << "Indicador de Alta Velocidad: " << (indicadorAltaVelocidad ? "Encendido" : "Apagado") << endl;
+    cout << "Indicador de Nivel Bajo de Combustible: " << (indicadorNivelBajoCombustible ? "Encendido" : "Apagado") << endl;
+}
+
+// MÉTODOS DE LA CLASE TANQUE
+Tanque::Tanque(float capacidad) : capacidad(capacidad), nivel(capacidad) {
+}
+float Tanque::getNivel() const {
+    return nivel;
+}
+void Tanque::cargar(float litros) {
+    // Verifica que la cantidad de gasolina a cargar sea positiva y que no se desborde
+    if (litros > 0 && litros <= (capacidad - nivel))
+        nivel =  nivel + litros;
+}
+
+// MÉTODOS DE LA CLASE LUCES
+Luces::Luces() : encendidas(false) {
+}
+void Luces::prender() {
+    encendidas = true;
+}
+void Luces::apagar() {
+    encendidas = false;
+}
+bool Luces::estanEncendidas() const {
+    return encendidas;
+}
+
 };
 
 //-------------------------------------//
