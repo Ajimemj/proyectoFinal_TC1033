@@ -102,35 +102,4 @@ void Luces::apagar() {
 }
 bool Luces::estanEncendidas() const {
     return encendidas;
-}
-
-};
-
-//-------------------------------------//
-class Automovil {
-private:
-    bool estado_encendido;
-    float velocidad;
-    //const float velocidad_max = 230;
-
-    Llanta* llantas[4];
-    Tablero tablero;
-    Tanque tanque;
-    Luces luces;
-public: 
-    // Define Método CONSTRUCTOR- EL automovil inicia apagado, inicializa llantas
-    Automovil () {
-        estado_encendido = false;
-        for (int i =0; i < 4; i++) {
-            llantas[i]= new Llanta ();
-        }
-    };
-
-    // Define Metodos ACCESORES 
-
-    // Define Métodos AUXILIARES
-    void encender_apagar (bool estado) {
-        estado_encendido = estado;
-    }
-    
 };
